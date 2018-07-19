@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "vue element ui bigdata table",
   "main": "src/components/vue-element-bigdata-table/index.js",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
