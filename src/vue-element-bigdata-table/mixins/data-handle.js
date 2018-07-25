@@ -87,7 +87,7 @@ export default {
       this.times1 = t1;
       this.times2 = t2;
       this.topPlaceholderHeight = parseInt(scrollTop / this.moduleHeight) * this.moduleHeight;
-      this.setTableData();
+      // this.setTableData();
     },
     //  设置数据
     setTableData () {
@@ -111,7 +111,7 @@ export default {
       });
     },
     setComputedProps () {
-      const len = this.insideTableData.length;
+      const len = this.store.states.filteredData.length;
       this.totalRowHeight = len * this.itemRowHeight;
     },
 
@@ -217,12 +217,23 @@ export default {
     data: {
       immediate: true,
       handler (value) {
+        // console.log('==============watch data')
         this.insideTableData = this.setIndex(value);
         this.resize();
+        // console.log('==============watch data')
         // this.store.commit('setData', value);
         if (this.$ready) {
           this.$nextTick(() => {
             // this.doLayout();
+            //  设置滚动条高度与左边度
+            this.scrollLeft = 0;
+            this.scrollTop = 0;
+            //  更新
+            this.setComputedProps();
+            //  延迟 计算滚动条是否显示
+            setTimeout(() => {
+              this.updateScrollY();
+            }, 100);
           });
         }
       }

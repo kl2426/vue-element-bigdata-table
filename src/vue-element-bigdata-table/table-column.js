@@ -283,14 +283,14 @@ export default {
           : _self.$slots.default;
       };
 
-      column.renderCell = function(h, data) {
+      column.renderCell = function (h, data) {
         return <div class="cell">{ renderCell(h, data, this._renderProxy) }</div>;
       };
 
       return;
     }
 
-    column.renderCell = function(h, data) {
+    column.renderCell = function (h, data) {
       if (_self.$scopedSlots.default) {
         renderCell = () => _self.$scopedSlots.default(data);
       }
@@ -354,7 +354,7 @@ export default {
 
     headerAlign (newVal) {
       if (this.columnConfig) {
-        this.columnConfig.headerAlign = 'is-' + (newVal ? newVal : this.align);
+        this.columnConfig.headerAlign = 'is-' + (newVal ? newVal + '' : this.align);
       }
     },
 

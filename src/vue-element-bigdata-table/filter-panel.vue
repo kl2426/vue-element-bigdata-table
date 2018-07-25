@@ -1,10 +1,13 @@
 <template>
   <transition name="el-zoom-in-top">
-    <div class="el-table-filter" v-if="multiple" v-show="showPopper">
+    <div class="el-table-filter bigdata-header-filter" v-if="multiple" v-show="showPopper">
       <div class="el-table-filter__content">
+        <el-input class="filter-keyword" v-model="keyWord" @keyup.native="changeKeyWord" size="mini" placeholder="请输入内容"></el-input>
         <el-checkbox-group class="el-table-filter__checkbox-group" v-model="filteredValue">
           <el-checkbox
-            v-for="filter in filters"
+            class="filter-label"
+            :title="filter.text"
+            v-for="filter in fiList"
             :key="filter.value"
             :label="filter.value">{{ filter.text }}</el-checkbox>
         </el-checkbox-group>
@@ -22,7 +25,7 @@
             :class="{ 'is-active': filterValue === undefined || filterValue === null }"
             @click="handleSelect(null)">{{ t('el.table.clearFilter') }}</li>
         <li class="el-table-filter__list-item"
-            v-for="filter in filters"
+            v-for="filter in fiList"
             :label="filter.value"
             :key="filter.value"
             :class="{ 'is-active': isActive(filter) }"
@@ -96,6 +99,8 @@ export default {
       this.filteredValue = [];
       this.confirmFilter(this.filteredValue);
       this.handleOutsideClick();
+      //  清空
+      this.fiList = [];
     },
 
     handleSelect (filterValue) {
@@ -116,6 +121,27 @@ export default {
         values: filteredValue
       });
       this.table.store.updateAllSelected();
+      //
+      //  设置滚动条高度与左边度
+      this.table.scrollLeft = 0;
+      this.table.scrollTop = 0;
+      //  更新
+      this.table.setComputedProps();
+      //  延迟 计算滚动条是否显示
+      setTimeout(() => {
+        this.table.updateScrollY();
+      }, 100);
+    },
+    //   关键词输入
+    changeKeyWord () {
+      let list = [];
+      let keyWord = this.keyWord;
+      this.filters.filter((e) => {
+        if (e.value.toString().indexOf(keyWord.toString()) > -1) {
+          list.push(e);
+        }
+      });
+      this.fiList = list;
     }
   },
 
@@ -123,7 +149,10 @@ export default {
     return {
       table: null,
       cell: null,
-      column: null
+      column: null,
+      keyWord: '',
+      // 搜索到显示出来
+      fiList: []
     };
   },
 
@@ -197,3 +226,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.bigdata-header-filter{}
+.bigdata-header-filter .filter-keyword{margin: 5px; margin-bottom: 0; width: 110px;}
+.bigdata-header-filter .el-table-filter__checkbox-group{max-height: 400px; width: 120px; overflow-x: hidden; overflow-y: auto;}
+.bigdata-header-filter .filter-label{width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+</style>

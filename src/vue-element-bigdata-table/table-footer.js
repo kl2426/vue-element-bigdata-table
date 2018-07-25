@@ -6,7 +6,7 @@ export default {
   mixins: [LayoutObserver],
 
   render (h) {
-    h;
+    if (h);
     const sums = [];
     this.columns.forEach((column, index) => {
       if (index === 0) {

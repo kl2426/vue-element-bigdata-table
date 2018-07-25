@@ -222,8 +222,7 @@ export default {
           data = this.data.slice(count3 + this.itemNum * 2, count3 + this.itemNum * 3);
           break;
       }
-      // console.log('==========this.timesTableData', this.tableIndex, data);
-      // console.log('==========this.data', this.data);
+      // console.log('==========data', data);
 
       return data;
     }
@@ -294,7 +293,7 @@ export default {
     getRowStyle (row, rowIndex) {
       const rowStyle = this.table.rowStyle;
       if (typeof rowStyle === 'function') {
-        return rowStyle.call(null, {
+        return rowStyle.call(this, {
           row,
           rowIndex
         });
@@ -312,7 +311,7 @@ export default {
       if (typeof rowClassName === 'string') {
         classes.push(rowClassName);
       } else if (typeof rowClassName === 'function') {
-        classes.push(rowClassName.call(null, {
+        classes.push(rowClassName.call(this, {
           row,
           rowIndex
         }));
@@ -328,7 +327,7 @@ export default {
     getCellStyle (rowIndex, columnIndex, row, column) {
       const cellStyle = this.table.cellStyle;
       if (typeof cellStyle === 'function') {
-        return cellStyle.call(null, {
+        return cellStyle.call(this, {
           rowIndex,
           columnIndex,
           row,
@@ -349,7 +348,7 @@ export default {
       if (typeof cellClassName === 'string') {
         classes.push(cellClassName);
       } else if (typeof cellClassName === 'function') {
-        classes.push(cellClassName.call(null, {
+        classes.push(cellClassName.call(this, {
           rowIndex,
           columnIndex,
           row,

@@ -503,7 +503,7 @@ TableStore.prototype.updateAllSelected = function () {
   let selectedCount = 0;
   for (let i = 0, j = data.length; i < j; i++) {
     const item = data[i];
-    const isRowSelectable = selectable && selectable.call(null, item, i);
+    const isRowSelectable = selectable && selectable.call(this, item, i);
     if (!isSelected(item)) {
       if (!selectable || isRowSelectable) {
         isAllSelected = false;

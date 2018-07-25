@@ -68,7 +68,7 @@ export default {
 
   mixins: [LayoutObserver],
 
-  render(h) {
+  render (h) {
     const originColumns = this.store.states.originColumns;
     const columnRows = convertToRows(originColumns, this.columns);
     // 是否拥有多级表头
@@ -257,7 +257,7 @@ export default {
     getHeaderRowStyle (rowIndex) {
       const headerRowStyle = this.table.headerRowStyle;
       if (typeof headerRowStyle === 'function') {
-        return headerRowStyle.call(null, { rowIndex });
+        return headerRowStyle.call(this, { rowIndex });
       }
       return headerRowStyle;
     },
@@ -269,7 +269,7 @@ export default {
       if (typeof headerRowClassName === 'string') {
         classes.push(headerRowClassName);
       } else if (typeof headerRowClassName === 'function') {
-        classes.push(headerRowClassName.call(null, { rowIndex }));
+        classes.push(headerRowClassName.call(this, { rowIndex }));
       }
 
       return classes.join(' ');
@@ -278,7 +278,7 @@ export default {
     getHeaderCellStyle (rowIndex, columnIndex, row, column) {
       const headerCellStyle = this.table.headerCellStyle;
       if (typeof headerCellStyle === 'function') {
-        return headerCellStyle.call(null, {
+        return headerCellStyle.call(this, {
           rowIndex,
           columnIndex,
           row,
@@ -307,7 +307,7 @@ export default {
       if (typeof headerCellClassName === 'string') {
         classes.push(headerCellClassName);
       } else if (typeof headerCellClassName === 'function') {
-        classes.push(headerCellClassName.call(null, {
+        classes.push(headerCellClassName.call(this, {
           rowIndex,
           columnIndex,
           row,
