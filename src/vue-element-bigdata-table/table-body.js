@@ -114,7 +114,7 @@ export default {
                   })
                 }
               </tr>,
-              this.store.isRowExpanded(row)
+                this.store.isRowExpanded(row)
                 ? (<tr>
                   <td colspan={ this.columns.length } class="el-table__expanded-cell">
                     { this.table.renderExpanded ? this.table.renderExpanded(h, { row, $index: this.fvIndex($index, row), store: this.store }) : ''}
@@ -151,7 +151,8 @@ export default {
       if (!this.highlight) return;
       const el = this.$el;
       if (!el) return;
-      const data = this.store.states.data;
+      // const data = this.store.states.data;
+      const data = this.timesTableData;
       const tr = el.querySelector('tbody').children;
       const rows = [].filter.call(tr, row => hasClass(row, 'el-table__row'));
       const oldRow = rows[data.indexOf(oldVal)];
@@ -222,7 +223,10 @@ export default {
           data = this.data.slice(count3 + this.itemNum * 2, count3 + this.itemNum * 3);
           break;
       }
-      // console.log('==========data', data);
+      //  选中行
+      this.$nextTick(() => {
+        this.dfCurrentRow(this.store.states.currentRow);
+      });
 
       return data;
     }
@@ -442,6 +446,26 @@ export default {
         _index = item['initRowIndex'];
       }
       return _index;
+    },
+    //  默认选中行处理
+    dfCurrentRow (currentRow) {
+      if (!this.highlight) return;
+      const el = this.$el;
+      if (!el) return;
+      // const data = this.store.states.data;
+      const data = this.timesTableData;
+      const tr = el.querySelector('tbody').children;
+      const rows = [].filter.call(tr, row => hasClass(row, 'el-table__row'));
+      const oldRow = rows[data.indexOf(currentRow)];
+      const newRow = rows[data.indexOf(currentRow)];
+      if (oldRow) {
+        removeClass(oldRow, 'current-row');
+      } else {
+        [].forEach.call(rows, row => removeClass(row, 'current-row'));
+      }
+      if (newRow) {
+        addClass(newRow, 'current-row');
+      }
     }
   }
 };

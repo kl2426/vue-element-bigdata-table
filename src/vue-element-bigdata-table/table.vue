@@ -40,6 +40,12 @@
       <div>
         <div :style="{height: `${topPlaceholderHeight}px`}"></div>
         <render-dom :render="renderTable"
+          :context="context"
+          :store="store"
+          :stripe="stripe"
+          :row-class-name="rowClassName"
+          :row-style="rowStyle"
+          :highlight="highlightCurrentRow"
           :style="{
             width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''
           }"
@@ -113,6 +119,11 @@
         <div>
           <div :style="{height: `${topPlaceholderHeight}px`}"></div>
           <render-dom :render="renderTable" :fixed="'left'"
+          :store="store"
+          :stripe="stripe"
+          :highlight="highlightCurrentRow"
+          :row-class-name="rowClassName"
+          :row-style="rowStyle"
           :style="{
             width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''
           }"
@@ -174,6 +185,11 @@
         <div>
           <div :style="{height: `${topPlaceholderHeight}px`}"></div>
           <render-dom :render="renderTable" :fixed="'right'"
+            :store="store"
+            :stripe="stripe"
+            :row-class-name="rowClassName"
+            :row-style="rowStyle"
+            :highlight="highlightCurrentRow"
             :style="{
               width: layout.bodyWidth ? layout.bodyWidth + 'px' : ''
             }"

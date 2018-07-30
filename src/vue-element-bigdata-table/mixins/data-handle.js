@@ -160,12 +160,12 @@ export default {
         props: {
           store: this.store,
           tableData: data,
-          stripe: this.stripe,
-          context: this.context,
-          rowClassName: this.rowClassName,
-          rowStyle: this.rowStyle,
+          stripe: prop.stripe,
+          context: prop.context,
+          rowClassName: prop.rowClassName,
+          rowStyle: prop.rowStyle,
           fixed: prop.fixed,
-          highlight: this.highlight,
+          highlight: prop.highlight,
           times: index === 1 ? this.times0 : (index === 2 ? this.times1 : this.times2),
           itemNum: this.itemNum,
           tableIndex: index

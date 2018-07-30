@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-bigdata-table
+      highlight-current-row
       ref="singleTable"
       :data="tableData"
       :height="750"
@@ -52,3 +53,6 @@
     }
   }
 </script>
+<style>
+.current-row td{font-weight: bold; background-color: #fefefe;}
+</style>
