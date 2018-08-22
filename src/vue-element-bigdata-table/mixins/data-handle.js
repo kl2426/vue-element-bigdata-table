@@ -157,6 +157,7 @@ export default {
     //  生成body
     getItemTable (h, data, index, prop) {
       return h(ElTableBody, {
+        style: {width: '100%'},
         props: {
           store: this.store,
           tableData: data,
