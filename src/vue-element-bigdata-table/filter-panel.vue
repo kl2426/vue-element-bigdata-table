@@ -222,6 +222,14 @@ export default {
       ) {
         this.popperJS._popper.style.zIndex = PopupManager.nextZIndex();
       }
+      //  显示列表
+      if (val) {
+        //  打开放入列表
+        this.fiList = [].concat(this.filters)
+      } else {
+        //  关闭清除列表
+        this.fiList = [];
+      }
     }
   }
 };
