@@ -36,7 +36,7 @@ export default {
       /**
       * @description 表格行高
       */
-      itemRowHeight: 30,
+      itemRowHeight: 48,
       //  表格滚动区域高度
       wrapperHeight: 0,
       // 当前展示的表格是第几个
