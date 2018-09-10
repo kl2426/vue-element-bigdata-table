@@ -5,16 +5,6 @@ import { getScrollbarWidth } from '../util/index.js';
 
 export default {
   data () {
-    // const store = new TableStore(this, {
-    //   rowKey: this.rowKey,
-    //   defaultExpandAll: this.defaultExpandAll
-    // });
-    // const layout = new TableLayout({
-    //   store,
-    //   table: this,
-    //   fit: this.fit,
-    //   showHeader: this.showHeader
-    // });
     //
     return {
       // layout,
@@ -36,7 +26,7 @@ export default {
       /**
       * @description 表格行高
       */
-      itemRowHeight: 30,
+      //  rowHeight: 32,
       //  表格滚动区域高度
       wrapperHeight: 0,
       // 当前展示的表格是第几个
@@ -49,7 +39,9 @@ export default {
       table1Data: [],
       table2Data: [],
       table3Data: [],
-      outerWidth: 0 // 外面容器宽度
+      outerWidth: 0, // 外面容器宽度
+      groupHeight: {},
+      groupIndex: 0
     };
   },
   methods: {
@@ -62,13 +54,29 @@ export default {
     },
     //  获取高度与数量
     updateHeight () {
-      this.$nextTick(() => {
-        let wrapperHeight = this.$refs.bodyWrapper.offsetHeight;
-        this.itemNum = Math.ceil((wrapperHeight - this.headerHeight) / this.itemRowHeight) + this.appendNum;
-        this.moduleHeight = this.itemNum * this.itemRowHeight;
-        this.wrapperHeight = wrapperHeight;
-        this.setTopPlace();
-      });
+      this.itemNum = Math.ceil(this.height / this.rowHeight) + this.appendNum;
+      this.wrapperHeight = this.$refs.bodyWrapper.offsetHeight;
+      this.setTopPlace();
+    },
+    //
+    initGroupHeight (data) {
+      //  分组数据
+      let moduleNb = Math.ceil(this.height / this.rowHeight) + this.appendNum;
+      console.log('moduleNb', moduleNb)
+      let groupHeight = {};
+      if (data.length > moduleNb) {
+        for (let i in data) {
+          let nb = (+i + 1) * moduleNb;
+          if (nb > data.length) {
+            groupHeight[i] = (data.length % moduleNb) * this.rowHeight;
+            break;
+          }
+          groupHeight[i] = moduleNb * this.rowHeight;
+        }
+      } else {
+        groupHeight[0] = data.length * this.rowHeight;
+      }
+      return groupHeight;
     },
     //  设置顶部定位
     setTopPlace () {
@@ -76,31 +84,25 @@ export default {
       let t0 = 0;
       let t1 = 0;
       let t2 = 0;
-      if (scrollTop > this.moduleHeight) {
+      if (scrollTop > this.groupHeight[0]) {
         switch (this.currentIndex) {
-          case 0: t0 = parseInt(scrollTop / (this.moduleHeight * 3)); t1 = t2 = t0; break;
-          case 1: t1 = parseInt((scrollTop - this.moduleHeight) / (this.moduleHeight * 3)); t0 = t1 + 1; t2 = t1; break;
-          case 2: t2 = parseInt((scrollTop - this.moduleHeight * 2) / (this.moduleHeight * 3)); t0 = t1 = t2 + 1;
+          case 0: t0 = parseInt(this.groupIndex / 3); t1 = t2 = t0; break;
+          case 1: t1 = parseInt(this.groupIndex / 3); t0 = t1 + 1; t2 = t1; break;
+          case 2: t2 = parseInt(this.groupIndex / 3); t0 = t1 = t2 + 1;
         }
       }
       this.times0 = t0;
       this.times1 = t1;
       this.times2 = t2;
-      this.topPlaceholderHeight = parseInt(scrollTop / this.moduleHeight) * this.moduleHeight;
-      // this.setTableData();
-    },
-    //  设置数据
-    setTableData () {
-      const count1 = this.times0 * this.itemNum * 3;
-      this.table1Data = this.insideTableData.slice(count1, count1 + this.itemNum);
-      const count2 = this.times1 * this.itemNum * 3;
-      this.table2Data = this.insideTableData.slice(count2 + this.itemNum, count2 + this.itemNum * 2);
-      const count3 = this.times2 * this.itemNum * 3;
-      this.table3Data = this.insideTableData.slice(count3 + this.itemNum * 2, count3 + this.itemNum * 3);
-
-      // console.log('==========this.table1Data', this.table1Data);
-      // console.log('==========this.table2Data', this.table2Data);
-      // console.log('==========this.table3Data', this.table3Data);
+      //
+      let height = 0;
+      for (let i in this.groupHeight) {
+        if (+i === +this.groupIndex) {
+          break;
+        }
+        height += this.groupHeight[i];
+      }
+      this.topPlaceholderHeight = height;
     },
     // 给表格数据添加行号，用于排序后正确修改数据
     setIndex (tableData) {
@@ -111,21 +113,13 @@ export default {
       });
     },
     setComputedProps () {
-      const len = this.store.states.filteredData.length;
-      this.totalRowHeight = len * this.itemRowHeight;
+      let height = 0;
+      for (let i in this.groupHeight) {
+        height += this.groupHeight[i];
+      }
+      this.totalRowHeight = height;
     },
-
-    // _initM () {
-    //   if (this.indexWidth === undefined) this.indexWidthInside = this.setIndexWidth(this.insideTableData.length);
-    //   else this.indexWidthInside = this.indexWidth;
-    //   this.oldTableWidth = this.colWidthArr.reduce((sum, b) => {
-    //     return sum + b;
-    //   }, 0);
-    //   this.widthArr = this.colWidthArr;
-    //   if ((this.colWidth * this.columns.length + (this.showIndex ? this.indexWidthInside : 0)) < this.outerWidth) this._setColWidthArr();
-    // },
     //
-
     _tableResize () {
       this.$nextTick(() => {
         this.updateHeight();
@@ -151,6 +145,7 @@ export default {
     //  三个Vnode的外包装
     renderTable (h, prop) {
       return h('div', {
+        class: 'vue-element-bigdata-table-div',
         style: prop.style
       }, this.getTables(h, prop));
     },
@@ -167,12 +162,21 @@ export default {
           rowStyle: prop.rowStyle,
           fixed: prop.fixed,
           highlight: prop.highlight,
-          times: index === 1 ? this.times0 : (index === 2 ? this.times1 : this.times2),
+          times0: this.times0,
+          times1: this.times1,
+          times2: this.times2,
           itemNum: this.itemNum,
-          tableIndex: index
+          tableIndex: index,
+          groupIndex: +this.groupIndex,
+          itemRowHeight: this.rowHeight
         },
         on: {
           //
+          'changeHeight': (index, height) => {
+            this.groupHeight[index] = height;
+            //
+            this.setComputedProps();
+          }
         },
         key: 'table-item-key' + index,
         ref: 'itemTable' + index,
@@ -205,12 +209,34 @@ export default {
       return (this.placeholderHeight - this.topPlaceholderHeight) < 0 ? 0 : this.placeholderHeight - this.topPlaceholderHeight;
     },
     placeholderHeight () {
-      return this.totalRowHeight - this.moduleHeight * 3; // 占位容器的总高度(上 + 下)
+      //  当前三块总高度
+      let mdHeight = 0;
+      let arr = [];
+      for (let i in this.groupHeight) {
+        arr[i] = this.groupHeight[i];
+      }
+      arr = arr.slice(this.groupIndex, +this.groupIndex + 3);
+      for (let n of arr) {
+        mdHeight += n;
+      }
+      return this.totalRowHeight - mdHeight; // 占位容器的总高度(上 + 下)
     }
   },
   watch: {
     scrollTop (top) {
-      this.currentIndex = parseInt((top % (this.moduleHeight * 3)) / this.moduleHeight);
+      //  当前滚动条是在三个table中的哪一个
+      let height = 0;
+      //  通过当前上部站位得到三个table最上一个table的是哪个组
+      // let index = 0;
+      for (let i in this.groupHeight) {
+        if (top >= height && top < (height + (this.groupHeight[i] ? this.groupHeight[i] : 0))) {
+          this.groupIndex = +i;
+          break;
+        }
+        height += this.groupHeight[i];
+      }
+      //
+      this.currentIndex = this.groupIndex % 3;
       this.$nextTick(() => {
         this.setTopPlace();
       });
@@ -218,10 +244,9 @@ export default {
     data: {
       immediate: true,
       handler (value) {
-        // console.log('==============watch data')
         this.insideTableData = this.setIndex(value);
+        this.groupHeight = this.initGroupHeight(value);
         this.resize();
-        // console.log('==============watch data')
         // this.store.commit('setData', value);
         if (this.$ready) {
           this.$nextTick(() => {
@@ -241,12 +266,17 @@ export default {
     },
     insideTableData () {
       this.resize();
-    }// ,
+    },
+    tableData (newValue) {
+      //  重置高度分组
+      this.groupHeight = this.initGroupHeight(newValue);
+      this.resize();
+    }
+
   },
   mounted () {
     this.$nextTick(() => {
       this.insideTableData = this.setIndex(this.tableData);
-      // console.log('==========this.insideTableData==', this.insideTableData);
       // this._initM();
       this.resize();
     });

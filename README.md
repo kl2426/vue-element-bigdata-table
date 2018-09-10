@@ -16,13 +16,25 @@ npm run dist
 ```
 ## Feature
 
-采用虚拟渲染方案，解决大数据量DOM渲染性能瓶颈。
+采用虚拟渲染方案，解决大数据量DOM渲染性能瓶颈。  
+1、基于elementUI table，结合vue-bigdata-table。  
+
+
+参考 [vue-bigdata-table](https://github.com/lison16/vue-bigdata-table)  
+参考elementUI [table组件](http://element-cn.eleme.io/#/zh-CN/component/table)
 
 ## API
 
 ### props:
 
 >参考elementUI [table组件](http://element-cn.eleme.io/#/zh-CN/component/table)
+
+>props 添加行高
+
+属性  |  说明  |  类型  |  默认值
+:-------: | -------  |  :-------:  |  :-------:
+rowHeight  |  行高  | Number  | 32
+
 
 ## 使用
 > npm 引用时，由于插件使用了jsx es6 需要配置webpack babel-loader
@@ -58,3 +70,5 @@ You may need an appropriate loader to handle this file type.
     ]
 }
 ```
+### 问题
+由于动态加载数据 props事件中 $index可能不准确。可使用row数据查找。

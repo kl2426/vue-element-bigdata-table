@@ -25,15 +25,23 @@ export default {
     highlight: Boolean,
     //
     tableData: Array,
-    times: Number,
+    times0: Number,
+    times1: Number,
+    times2: Number,
+    groupIndex: Number,
     itemNum: Number,
-    tableIndex: Number
+    tableIndex: Number,
+    itemRowHeight: {
+      type: Number,
+      default: 28
+    }
   },
 
   render (h) {
     const columnsHidden = this.columns.map((column, index) => this.isColumnHidden(index));
     return (
       <table
+        ref="tableBody"
         class="el-table__body"
         cellspacing="0"
         cellpadding="0"
@@ -64,7 +72,7 @@ export default {
                       if (rowspan === 1 && colspan === 1) {
                         return (
                           <td
-                            style={ this.getCellStyle(this.fvIndex($index, row), cellIndex, row, column) }
+                            style={ [{height: this.itemRowHeight + 'px'}, this.getCellStyle(this.fvIndex($index, row), cellIndex, row, column)] }
                             class={ this.getCellClass(this.fvIndex($index, row), cellIndex, row, column) }
                             on-mouseenter={ ($event) => this.handleCellMouseEnter($event, row) }
                             on-mouseleave={ this.handleCellMouseLeave }>
@@ -87,7 +95,7 @@ export default {
                       } else {
                         return (
                           <td
-                            style={ this.getCellStyle(this.fvIndex($index, row), cellIndex, row, column) }
+                            style={ [{height: this.itemRowHeight + 'px'}, this.getCellStyle(this.fvIndex($index, row), cellIndex, row, column)] }
                             class={ this.getCellClass(this.fvIndex($index, row), cellIndex, row, column) }
                             rowspan={ rowspan }
                             colspan={ colspan }
@@ -114,7 +122,7 @@ export default {
                   })
                 }
               </tr>,
-                this.store.isRowExpanded(row)
+              this.store.isRowExpanded(row)
                 ? (<tr>
                   <td colspan={ this.columns.length } class="el-table__expanded-cell">
                     { this.table.renderExpanded ? this.table.renderExpanded(h, { row, $index: this.fvIndex($index, row), store: this.store }) : ''}
@@ -211,15 +219,15 @@ export default {
       });
       switch (this.tableIndex) {
         case 1:
-          count1 = this.times * this.itemNum * 3;
+          count1 = this.times0 * this.itemNum * 3;
           data = this.data.slice(count1, count1 + this.itemNum);
           break;
         case 2:
-          count2 = this.times * this.itemNum * 3;
+          count2 = this.times1 * this.itemNum * 3;
           data = this.data.slice(count2 + this.itemNum, count2 + this.itemNum * 2);
           break;
         case 3:
-          count3 = this.times * this.itemNum * 3;
+          count3 = this.times2 * this.itemNum * 3;
           data = this.data.slice(count3 + this.itemNum * 2, count3 + this.itemNum * 3);
           break;
       }
@@ -234,14 +242,49 @@ export default {
 
   data () {
     return {
-      tooltipContent: ''
+      tooltipContent: '',
+      //  定时器监听table高度改变
+      intervalId: null,
+      //  当前table高度
+      tableBodyHeight: 0
     };
   },
 
   created () {
     this.activateTooltip = debounce(50, tooltip => tooltip.handleShowPopper());
   },
-
+  mounted () {
+    this.$nextTick(() => {
+      this.tableBodyHeight = this.$refs.tableBody.offsetHeight;
+      //  定时器监听当前表格高度改变
+      this.intervalId = setInterval(() => {
+        if (this.$refs.tableBody.offsetHeight > 0 && this.tableBodyHeight !== this.$refs.tableBody.offsetHeight) {
+          //  有改变
+          this.tableBodyHeight = this.$refs.tableBody.offsetHeight;
+          //  当前块取当前分组
+          let groupIndex = this.times0;
+          switch (this.tableIndex) {
+            case 1:
+              groupIndex = this.times0 * 3 + this.tableIndex - 1;
+              break;
+            case 2:
+              groupIndex = this.times1 * 3 + this.tableIndex - 1;
+              break;
+            case 3:
+              groupIndex = this.times2 * 3 + this.tableIndex - 1;
+              break;
+          }
+          // 执行修改高度与总高度
+          this.$emit('changeHeight', groupIndex, this.tableBodyHeight);
+        }
+      }, 80);
+    });
+  },
+  destroyed () {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  },
   methods: {
     // _l (data, cb) {
     //   for (let i in data) {

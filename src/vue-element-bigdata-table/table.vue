@@ -1,5 +1,5 @@
 <template>
-  <div class="el-table"
+  <div class="el-table vue-element-bigdata-table"
     :class="[{
       'el-table--fit': fit,
       'el-table--striped': stripe,
@@ -325,7 +325,13 @@ export default {
 
     tooltipEffect: String,
 
-    spanMethod: Function
+    spanMethod: Function,
+
+    //  行高
+    rowHeight: {
+      type: Number,
+      default: 32
+    }
   },
 
   components: {
@@ -686,3 +692,8 @@ export default {
   }
 };
 </script>
+<style>
+  .vue-element-bigdata-table .vue-element-bigdata-table-div > table > tbody > tr > td{
+    padding: 0;
+  }
+</style>

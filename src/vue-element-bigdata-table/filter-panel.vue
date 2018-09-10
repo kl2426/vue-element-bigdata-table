@@ -125,7 +125,9 @@ export default {
       //  设置滚动条高度与左边度
       this.table.scrollLeft = 0;
       this.table.scrollTop = 0;
-      //  更新
+      //  更新数据高度分组
+      // this.table.initGroupHeight(filteredValue);
+      //  重新计算高度
       this.table.setComputedProps();
       //  延迟 计算滚动条是否显示
       setTimeout(() => {
