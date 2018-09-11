@@ -252,8 +252,8 @@ export default {
           this.$nextTick(() => {
             // this.doLayout();
             //  设置滚动条高度与左边度
-            this.scrollLeft = 0;
-            this.scrollTop = 0;
+            // this.scrollLeft = 0;
+            // this.scrollTop = 0;
             //  更新
             this.setComputedProps();
             //  延迟 计算滚动条是否显示
