@@ -157,8 +157,8 @@ class TableLayout {
           column.realWidth = column.minWidth;
         });
       }
-
-      this.bodyWidth = Math.max(bodyMinWidth, bodyWidth);
+      // fix scrollY theader and tbody does not match
+      this.bodyWidth = Math.max(bodyMinWidth, bodyWidth - scrollYWidth);
     } else {
       flattenColumns.forEach((column) => {
         if (!column.width && !column.minWidth) {
