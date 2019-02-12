@@ -141,11 +141,15 @@ export default {
 
   watch: {
     'store.states.hoverRow' (newVal, oldVal) {
-      if (!this.store.states.isComplex) return;
+//       if (!this.store.states.isComplex) return;
       const el = this.$el;
       if (!el) return;
       const tr = el.querySelector('tbody').children;
       const rows = [].filter.call(tr, row => hasClass(row, 'el-table__row'));
+      if (this.itemNum) {
+        newVal %= this.itemNum;
+        oldVal %= this.itemNum;
+      }
       const oldRow = rows[oldVal];
       const newRow = rows[newVal];
       if (oldRow) {
