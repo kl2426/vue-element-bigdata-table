@@ -1,4 +1,4 @@
-# vue-element-bigdata-table
+# vue-elementui-bigdata-table
 
 > Vue2 elementUI table 组件扩展，大量数据表格。
 
@@ -37,47 +37,48 @@ npm run dist
 
 ## 使用
 
-> npm 引用时，由于插件使用了 jsx es6 需要配置 webpack babel-loader
+> npm i vue-elementui-bigdata-table --save
 >
-> 编译使用时，因编译时解决了报错问题，所以暂未发现使用报错
-> import ElBigdataTable from '../dist/vue-element-bigdata-table.min.js'//注意路径
+> import ElBigdataTable from 'vue-elementui-bigdata-table.js'
+>
 > Vue.use(ElBigdataTable)
 
 ### 报错
 
 ```shell
-error  in ./node_modules/_vue-element-bigdata-table@1.2.0@vue-element-bigdata-table/src/vue-element-bigdata-table/table-body.js
-
-Module parse failed: Unexpected token (36:6)
-You may need an appropriate loader to handle this file type.
-|     const columnsHidden = this.columns.map((column, index) => this.isColumnHidden(index));
-|     return (
-|       <table
-|         class="el-table__body"
-|         cellspacing="0"
+[//]: # (error  in ./node_modules/_vue-elementui-bigdata-table@1.2.0@vue-elementui-bigdata-table/src/vue-elementui-bigdata-table/)
+[//]: # (table-body.js)
+[//]: # (Module parse failed: Unexpected token (36:6))
+[//]: # (You may need an appropriate loader to handle this file type.)
+[//]: # (|     const columnsHidden = this.columns.map((column, index) => this.isColumnHidden(index));)
+[//]: # (|     return ()
+[//]: # (|       <table)
+[//]: # (|         class="el-table__body")
+[//]: # (|         cellspacing="0")
 
 ```
 
 ### 解决方法
 
-> 配置 webpack, 添加 vue-element-bigdata-table 参与 jsx 解析
+````
+[//]: # (> 配置 webpack, 添加 vue-elementui-bigdata-table 参与 jsx 解析)
+[//]: # (```javascript)
+[//]: # (// function resolve (dir) {)
+[//]: # (//   return path.join(__dirname, '..', dir))
+[//]: # (// })
+[//]: # ({)
+[//]: # (    test: /\.js$/,)
+[//]: # (    loader: 'babel-loader',)
+[//]: # (    include: [)
+[//]: # (        resolve('src'),)
+[//]: # (        resolve('test'),)
+[//]: # (        resolve('node_modules/webpack-dev-server/client'),)
+[//]: # (        resolve('node_modules/vue-elementui-bigdata-table') //   add)
+[//]: # (    ])
+[//]: # (})
+[//]: # (```)
 
-```javascript
-// function resolve (dir) {
-//   return path.join(__dirname, '..', dir)
-// }
-
-{
-    test: /\.js$/,
-    loader: 'babel-loader',
-    include: [
-        resolve('src'),
-        resolve('test'),
-        resolve('node_modules/webpack-dev-server/client'),
-        resolve('node_modules/vue-element-bigdata-table') //   add
-    ]
-}
-```
+````
 
 ### 问题
 

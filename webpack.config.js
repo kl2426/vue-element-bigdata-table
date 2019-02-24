@@ -12,7 +12,7 @@ module.exports = {
     publicPath: '/dist/',
     filename:
       process.env.NODE_ENV === 'production'
-        ? 'vue-element-bigdata-table.min.js'
+        ? 'vue-elementui-bigdata-table.js'
         : 'build.js', // 打包后输出的文件名
     library: 'ElBigdataTable', // library指定的就是你使用require时的模块名，这里便是require("ElBigdataTable")
     libraryTarget: 'umd', // libraryTarget会生成不同umd的代码,可以只是commonjs标准的，也可以是指amd标准的，也可以只是通过script标签引入

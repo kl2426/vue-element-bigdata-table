@@ -1,10 +1,13 @@
 {
-  "name": "vue-element-bigdata-table",
+  "name": "vue-elementui-bigdata-table",
   "version": "1.3.2",
   "description": "vue element ui bigdata table",
-  "author": "wu<308822989@qq.com>",
-  "license": "ISC",
-  "main": "src/vue-element-bigdata-table/index.js",
+  "author": {
+    "name": "ArcherTrister",
+    "email": "ArcherTrister@outlook.com"
+  },
+  "license": "MIT",
+  "main": "dist/vue-elementui-bigdata-table.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "dist": "cross-env NODE_ENV=production webpack --progress --hide-modules",
@@ -12,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kl2426/vue-element-bigdata-table.git"
+    "url": "git+https://github.com/ArcherTrister/vue-element-bigdata-table.git"
   },
   "bugs": {
-    "url": "https://github.com/kl2426/vue-element-bigdata-table/issues"
+    "url": "https://github.com/ArcherTrister/vue-element-bigdata-table/issues"
   },
-  "homepage": "https://github.com/kl2426/vue-element-bigdata-table#readme",
+  "homepage": "https://github.com/ArcherTrister/vue-element-bigdata-table#readme",
   "dependencies": {
     "element-ui": "^2.4.4",
     "vue": "^2.5.11"
