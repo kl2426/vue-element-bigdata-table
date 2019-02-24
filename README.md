@@ -43,7 +43,7 @@ npm run dist
 >
 > Vue.use(ElBigdataTable)
 
-### 报错
+### 报错(忽略【已修复】)
 
 ```shell
 [//]: # (error  in ./node_modules/_vue-elementui-bigdata-table@1.2.0@vue-elementui-bigdata-table/src/vue-elementui-bigdata-table/)
@@ -58,7 +58,7 @@ npm run dist
 
 ```
 
-### 解决方法
+### 解决方法(忽略【已修复】)
 
 ````
 [//]: # (> 配置 webpack, 添加 vue-elementui-bigdata-table 参与 jsx 解析)
