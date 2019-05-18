@@ -49,7 +49,11 @@ module.exports = {
         loader: 'babel-loader',
         include: [
           path.resolve(__dirname, 'src'),
-          path.resolve(__dirname, 'node_modules/element-ui/src')
+//           path.resolve(__dirname, 'node_modules/element-ui/src')
+          path.resolve(__dirname, 'node_modules/_element-ui@2.8.2@element-ui/src')
+        ],
+        exclude: [
+          path.resolve(__dirname, 'node_modules/_element-ui@2.8.2@element-ui/src/utils/popper.js')
         ]
       },
       {
